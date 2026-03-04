@@ -9,3 +9,7 @@ let vida1 = 20
 let vida2 = 20
 let turno = 1
 
+function rolarDado() {
+  return Math.floor(Math.random() * 6) + 1
+}
+
