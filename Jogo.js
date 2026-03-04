@@ -3,7 +3,7 @@ const readline = require("readline")
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
-});
+})
 
 let vida1 = 20
 let vida2 = 20
@@ -30,6 +30,11 @@ function turnoJogo() {
       console.log("CRÍTICO! Dano dobrado!")
     }
 
+    if (dano === 1) {
+  console.log("❌ Errou o ataque!");
+  dano = 0;
+}
+
     console.log("Dano:", dano)
 
     if (turno === 1) {
@@ -52,5 +57,5 @@ function turnoJogo() {
   })
 }
 
-console.log("=== JOGO DE DADOS ===") 
-turnoJogo
+console.log("=== DADOKOMBAT ===") 
+turnoJogo()
