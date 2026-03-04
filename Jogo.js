@@ -21,13 +21,22 @@ function turnoJogo() {
   rl.question("Aperte ENTER para atacar...", function () {
 
     let dano = rolarDado()
+
+    
+    let critico = Math.random() < 0.2 
+
+    if (critico) {
+      dano *= 2
+      console.log("CRÍTICO! Dano dobrado!")
+    }
+
     console.log("Dano:", dano)
 
     if (turno === 1) {
       vida2 -= dano
       turno = 2
     } else {
-      vida1 -= dano;
+      vida1 -= dano
       turno = 1
     }
 
@@ -44,4 +53,4 @@ function turnoJogo() {
 }
 
 console.log("=== JOGO DE DADOS ===") 
-turnoJogo()
+turnoJogo
