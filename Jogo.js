@@ -13,3 +13,32 @@ function rolarDado() {
   return Math.floor(Math.random() * 6) + 1
 }
 
+function turnoJogo() {
+  console.log("\nVida P1:", vida1)
+  console.log("Vida P2:", vida2)
+  console.log("Turno do Player", turno)
+
+  rl.question("Aperte ENTER para atacar...", function () {
+
+    let dano = rolarDado()
+    console.log("Dano:", dano)
+
+    if (turno === 1) {
+      vida2 -= dano
+      turno = 2
+    } else {
+      vida1 -= dano;
+      turno = 1
+    }
+
+    if (vida1 <= 0) {
+      console.log(" Player 2 venceu! FATALITY...")
+      rl.close()
+    } else if (vida2 <= 0) {
+      console.log(" Player 1 venceu! FATALITY...")
+      rl.close()
+    } else {
+      turnoJogo()
+    }
+  })
+}
