@@ -7,21 +7,13 @@ const rl = readline.createInterface({
 
 let vida1 = 40
 let vida2 = 40
-let turno = Math.random() < 0.5 ? 1 : 2
 
 function rolarDado() {
   return Math.floor(Math.random() * 6) + 1
   
 }
 
-function turnoJogo() {
-  console.log("\nVida P1:", vida1)
-  console.log("Vida P2:", vida2)
-  console.log("Turno do Player", turno)
-
-  rl.question("Aperte ENTER para atacar...", function () {
-
-   function calcularDanoBase() {
+ function calcularDanoBase() {
   let dano = rolarDado()
 
   let critico = Math.random() < 0.2
@@ -38,25 +30,45 @@ function turnoJogo() {
   return dano
 }
 
-    console.log("Dano:", dano)
+function turnoJogo() {
+  console.log("\nVida P1:", vida1)
+  console.log("Vida P2:", vida2)
 
-    if (turno === 1) {
+  rl.question("Aperte ENTER para iniciar o CLASH...", function () {
+
+    let dado1 = rolarDado()
+    let dado2 = rolarDado()
+
+    console.log("\nPlayer 1 rolou:", dado1)
+    console.log("Player 2 rolou:", dado2)
+
+    if (dado1 > dado2) {
+      let dano = dado1 - dado2
       vida2 -= dano
-      turno = 2
-    } else {
+      console.log("Player 1 venceu o clash! Dano:", dano)
+    } 
+    else if (dado2 > dado1) {
+      let dano = dado2 - dado1
       vida1 -= dano
-      turno = 1
+      console.log("Player 2 venceu o clash! Dano:", dano)
+    } 
+    else {
+      console.log("Empate! Nenhum dano causado.")
     }
 
+    
     if (vida1 <= 0) {
-      console.log(" Player 2 venceu! FATALITY...")
+      console.log("\nPlayer 2 venceu! FATALITY...")
       rl.close()
-    } else if (vida2 <= 0) {
-      console.log(" Player 1 venceu! FATALITY...")
+    } 
+    else if (vida2 <= 0) {
+      console.log("\nPlayer 1 venceu! FATALITY...")
       rl.close()
-    } else {
+    } 
+    else {
       turnoJogo()
     }
+
   })
 }
 
