@@ -5,12 +5,13 @@ const rl = readline.createInterface({
   output: process.stdout
 })
 
-let vida1 = 20
-let vida2 = 20
-let turno = 1
+let vida1 = 40
+let vida2 = 40
+let turno = Math.random() < 0.5 ? 1 : 2
 
 function rolarDado() {
   return Math.floor(Math.random() * 6) + 1
+  
 }
 
 function turnoJogo() {
@@ -31,7 +32,7 @@ function turnoJogo() {
     }
 
     if (dano === 1) {
-  console.log("❌ Errou o ataque!");
+  console.log("Errou o ataque!")
   dano = 0;
 }
 
