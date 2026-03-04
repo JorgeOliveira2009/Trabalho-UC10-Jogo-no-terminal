@@ -8,67 +8,89 @@ const rl = readline.createInterface({
 let vida1 = 40
 let vida2 = 40
 
+const cartas = [
+  { nome: "Golpe rápido", dados: 1 },
+  { nome: "Ataque pesado", dados: 2 },
+  { nome: "Força total", dados: 3 }
+]
+
 function rolarDado() {
   return Math.floor(Math.random() * 6) + 1
   
 }
 
- function calcularDanoBase() {
-  let dano = rolarDado()
-
-  let critico = Math.random() < 0.2
-  if (critico) {
-    dano *= 2
-    console.log("CRÍTICO! Dano dobrado!")
+ function rolarMultiplosDados(qtd) {
+  let total = 0
+  for (let i = 0; i < qtd; i++) {
+    total += rolarDado()
   }
-
-  if (dano === 1) {
-    console.log("Errou o ataque!")
-    dano = 0
-  }
-
-  return dano
+  return total
 }
 
 function turnoJogo() {
-  console.log("\nVida P1:", vida1)
+  console.log("\n====================")
+  console.log("Vida P1:", vida1)
   console.log("Vida P2:", vida2)
+  console.log("====================\n")
 
-  rl.question("Aperte ENTER para iniciar o CLASH...", function () {
+  console.log("Cartas disponíveis:")
+  cartas.forEach((carta, index) => {
+    console.log(`${index + 1} - ${carta.nome} (Rola ${carta.dados}d6)`)
+  })
 
-    let dado1 = rolarDado()
-    let dado2 = rolarDado()
+  rl.question("\nPlayer 1 - Escolha o número da carta: ", function (resposta1) {
 
-    console.log("\nPlayer 1 rolou:", dado1)
-    console.log("Player 2 rolou:", dado2)
+    let cartaP1 = cartas[parseInt(resposta1) - 1]
 
-    if (dado1 > dado2) {
-      let dano = dado1 - dado2
-      vida2 -= dano
-      console.log("Player 1 venceu o clash! Dano:", dano)
-    } 
-    else if (dado2 > dado1) {
-      let dano = dado2 - dado1
-      vida1 -= dano
-      console.log("Player 2 venceu o clash! Dano:", dano)
-    } 
-    else {
-      console.log("Empate! Nenhum dano causado.")
+    if (!cartaP1) {
+      console.log("Escolha inválida!")
+      return turnoJogo()
     }
 
-    
-    if (vida1 <= 0) {
-      console.log("\nPlayer 2 venceu! FATALITY...")
-      rl.close()
-    } 
-    else if (vida2 <= 0) {
-      console.log("\nPlayer 1 venceu! FATALITY...")
-      rl.close()
-    } 
-    else {
-      turnoJogo()
-    }
+    rl.question("Player 2 - Escolha o número da carta: ", function (resposta2) {
 
+      let cartaP2 = cartas[parseInt(resposta2) - 1]
+
+      if (!cartaP2) {
+        console.log("Escolha inválida!")
+        return turnoJogo()
+      }
+
+      console.log("\n---CLASH---")
+
+      let total1 = rolarMultiplosDados(cartaP1.dados)
+      let total2 = rolarMultiplosDados(cartaP2.dados)
+
+      console.log("Player 1 usou:", cartaP1.nome, "→ Total:", total1)
+      console.log("Player 2 usou:", cartaP2.nome, "→ Total:", total2)
+
+      if (total1 > total2) {
+        let dano = total1 - total2
+        vida2 -= dano
+        console.log("Player 1 venceu! Dano:", dano)
+      } 
+      else if (total2 > total1) {
+        let dano = total2 - total1
+        vida1 -= dano
+        console.log("Player 2 venceu! Dano:", dano)
+      } 
+      else {
+        console.log("Empate! Nenhum dano causado.")
+      }
+
+      if (vida1 <= 0) {
+        console.log("\nPlayer 2 venceu! FATALITY...")
+        rl.close()
+      } 
+      else if (vida2 <= 0) {
+        console.log("\nPlayer 1 venceu! FATALITY...")
+        rl.close()
+      } 
+      else {
+        turnoJogo()
+      }
+
+    })
   })
 }
 
