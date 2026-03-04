@@ -21,19 +21,21 @@ function turnoJogo() {
 
   rl.question("Aperte ENTER para atacar...", function () {
 
-    let dano = rolarDado()
+   function calcularDanoBase() {
+  let dano = rolarDado()
 
-    
-    let critico = Math.random() < 0.2 
+  let critico = Math.random() < 0.2
+  if (critico) {
+    dano *= 2
+    console.log("CRÍTICO! Dano dobrado!")
+  }
 
-    if (critico) {
-      dano *= 2
-      console.log("CRÍTICO! Dano dobrado!")
-    }
+  if (dano === 1) {
+    console.log("Errou o ataque!")
+    dano = 0
+  }
 
-    if (dano === 1) {
-  console.log("Errou o ataque!")
-  dano = 0;
+  return dano
 }
 
     console.log("Dano:", dano)
