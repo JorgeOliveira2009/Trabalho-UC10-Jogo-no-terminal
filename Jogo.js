@@ -42,3 +42,6 @@ function turnoJogo() {
     }
   })
 }
+
+console.log("=== JOGO DE DADOS ===") 
+turnoJogo()
