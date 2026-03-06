@@ -13,7 +13,14 @@ let energia2 = 10
 const cartas = [
   { nome: "Golpe rápido", dados: 1, bonus: 2, custo: 2 },
   { nome: "Ataque pesado", dados: 2, bonus: 0, custo: 4 },
-  { nome: "Força total", dados: 3, bonus: -2, custo: 6 }
+  { nome: "Força total", dados: 3, bonus: -2, custo: 6 },
+  { nome: "Golpe Supremo", dados: 4, bonus: 1, custo: 8 },
+  { nome: "Tempestade de Dados", dados: 5, bonus: -1, custo: 9 },
+  { nome: "Impacto Brutal", dados: 3, bonus: 3, custo: 7 },
+  { nome: "Fúria Selvagem", dados: 4, bonus: -1, custo: 7 },
+  { nome: "Golpe Fantasma", dados: 2, bonus: 4, custo: 6 },
+  { nome: "Explosão Titânica", dados: 6, bonus: -2, custo: 10 }
+
 ]
 
 function comprarCartas(qtd) {
@@ -41,15 +48,23 @@ function mostrarCartas(mao) {
 
 function rolarDado() {
   return Math.floor(Math.random() * 6) + 1
-  
 }
 
- function rolarMultiplosDados(qtd) {
+function rolarMultiplosDados(qtd) {
   let total = 0
   for (let i = 0; i < qtd; i++) {
     total += rolarDado()
   }
   return total
+}
+
+function podeJogar(energia) {
+  for (let carta of cartas) {
+    if (energia >= carta.custo) {
+      return true
+    }
+  }
+  return false
 }
 
 function turnoJogo() {
@@ -68,8 +83,24 @@ function turnoJogo() {
   console.log("\nPlayer 1 comprou:")
   mostrarCartas(maoP1)
 
+  if (!podeJogar(energia1)) {
+    console.log("Player 1 está sem energia e pulou o turno!")
+    energia1 += 2
+    if (energia1 > 10) energia1 = 10
+    turnoJogo()
+    return
+  }
+
   console.log("\nPlayer 2 comprou:")
   mostrarCartas(maoP2)
+
+  if (!podeJogar(energia2)) {
+    console.log("Player 2 está sem energia e pulou o turno!")
+    energia2 += 2
+    if (energia2 > 10) energia2 = 10
+    turnoJogo()
+    return
+  }
 
   rl.question("\nPlayer 1 - Escolha o número da carta: ", function (resposta1) {
 
@@ -150,5 +181,6 @@ function turnoJogo() {
   })
 
 }
-console.log("=== DADOKOMBAT ===")
+
+console.log("=== DADOKOMBAT ===") 
 turnoJogo()
