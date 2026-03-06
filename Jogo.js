@@ -7,11 +7,13 @@ const rl = readline.createInterface({
 
 let vida1 = 40
 let vida2 = 40
+let energia1 = 10
+let energia2 = 10
 
 const cartas = [
-  { nome: "Golpe rápido", dados: 1, bonus: 2 },
-  { nome: "Ataque pesado", dados: 2, bonus: 0 },
-  { nome: "Força total", dados: 3, bonus: -2 }
+  { nome: "Golpe rápido", dados: 1, bonus: 2, custo: 2 },
+  { nome: "Ataque pesado", dados: 2, bonus: 0, custo: 4 },
+  { nome: "Força total", dados: 3, bonus: -2, custo: 6 }
 ]
 
 function comprarCartas(qtd) {
@@ -31,7 +33,8 @@ function mostrarCartas(mao) {
     console.log(
       i + 1 + " - " + carta.nome +
       " | Dados: " + carta.dados +
-      " | Bônus: " + carta.bonus
+      " | Bônus: " + carta.bonus +
+      " | Custo: " + carta.custo 
     )
   }
 }
@@ -50,19 +53,23 @@ function rolarDado() {
 }
 
 function turnoJogo() {
+
   console.log("\n====================")
   console.log("Vida P1:", vida1)
+  console.log("Energia P1:", energia1)
+
   console.log("Vida P2:", vida2)
+  console.log("Energia P2:", energia2)
   console.log("====================\n")
 
   let maoP1 = comprarCartas(3)
-let maoP2 = comprarCartas(3)
+  let maoP2 = comprarCartas(3)
 
-console.log("\nPlayer 1 comprou:")
-mostrarCartas(maoP1)
+  console.log("\nPlayer 1 comprou:")
+  mostrarCartas(maoP1)
 
-console.log("\nPlayer 2 comprou:")
-mostrarCartas(maoP2)
+  console.log("\nPlayer 2 comprou:")
+  mostrarCartas(maoP2)
 
   rl.question("\nPlayer 1 - Escolha o número da carta: ", function (resposta1) {
 
@@ -73,6 +80,13 @@ mostrarCartas(maoP2)
       return turnoJogo()
     }
 
+    if (energia1 < cartaP1.custo) {
+      console.log("Energia insuficiente!")
+      return turnoJogo()
+    }
+
+    energia1 -= cartaP1.custo
+
     rl.question("Player 2 - Escolha o número da carta: ", function (resposta2) {
 
       let cartaP2 = maoP2[parseInt(resposta2) - 1]
@@ -82,7 +96,14 @@ mostrarCartas(maoP2)
         return turnoJogo()
       }
 
-      console.log("\n---CLASH---")
+      if (energia2 < cartaP2.custo) {
+        console.log("Energia insuficiente!")
+        return turnoJogo()
+      }
+
+      energia2 -= cartaP2.custo
+
+      console.log("\n--- CLASH ---")
 
       let total1 = rolarMultiplosDados(cartaP1.dados) + cartaP1.bonus
       let total2 = rolarMultiplosDados(cartaP2.dados) + cartaP2.bonus
@@ -101,24 +122,33 @@ mostrarCartas(maoP2)
         console.log("Player 2 venceu! Dano:", dano)
       } 
       else {
-        console.log("Empate! Nenhum dano causado.")
+        console.log("Empate!")
       }
 
       if (vida1 <= 0) {
         console.log("\nPlayer 2 venceu! FATALITY...")
         rl.close()
-      } 
-      else if (vida2 <= 0) {
-        console.log("\nPlayer 1 venceu! FATALITY...")
-        rl.close()
-      } 
-      else {
-        turnoJogo()
+        return
       }
 
-    })
-  })
-}
+      if (vida2 <= 0) {
+        console.log("\nPlayer 1 venceu! FATALITY...")
+        rl.close()
+        return
+      }
 
-console.log("=== DADOKOMBAT ===") 
+      energia1 += 2
+      energia2 += 2
+
+      if (energia1 > 10) energia1 = 10
+      if (energia2 > 10) energia2 = 10
+
+      turnoJogo()
+
+    })
+
+  })
+
+}
+console.log("=== DADOKOMBAT ===")
 turnoJogo()
