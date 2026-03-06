@@ -52,9 +52,16 @@ function rolarDado() {
 
 function rolarMultiplosDados(qtd) {
   let total = 0
+  let resultados = []
+
   for (let i = 0; i < qtd; i++) {
-    total += rolarDado()
+    let valor = rolarDado()
+    resultados.push(valor)
+    total += valor
   }
+
+  console.log("Dados:", resultados.join(", "))
+
   return total
 }
 
