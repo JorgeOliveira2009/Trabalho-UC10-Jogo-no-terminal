@@ -9,9 +9,9 @@ let vida1 = 40
 let vida2 = 40
 
 const cartas = [
-  { nome: "Golpe rápido", dados: 1 },
-  { nome: "Ataque pesado", dados: 2 },
-  { nome: "Força total", dados: 3 }
+  { nome: "Golpe rápido", dados: 1, bonus: 2 },
+  { nome: "Ataque pesado", dados: 2, bonus: 0 },
+  { nome: "Força total", dados: 3, bonus: -2 }
 ]
 
 function rolarDado() {
@@ -35,7 +35,7 @@ function turnoJogo() {
 
   console.log("Cartas disponíveis:")
   cartas.forEach((carta, index) => {
-    console.log(`${index + 1} - ${carta.nome} (Rola ${carta.dados}d6)`)
+    console.log(`${index + 1} - ${carta.nome} (${carta.dados}d6, bônus ${carta.bonus})`)
   })
 
   rl.question("\nPlayer 1 - Escolha o número da carta: ", function (resposta1) {
