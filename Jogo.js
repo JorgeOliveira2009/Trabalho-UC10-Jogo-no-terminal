@@ -14,6 +14,28 @@ const cartas = [
   { nome: "Força total", dados: 3, bonus: -2 }
 ]
 
+function comprarCartas(qtd) {
+  let mao = []
+
+  for (let i = 0; i < qtd; i++) {
+    let indice = Math.floor(Math.random() * cartas.length)
+    mao.push(cartas[indice])
+  }
+
+  return mao
+}
+
+function mostrarCartas(mao) {
+  for (let i = 0; i < mao.length; i++) {
+    let carta = mao[i]
+    console.log(
+      i + 1 + " - " + carta.nome +
+      " | Dados: " + carta.dados +
+      " | Bônus: " + carta.bonus
+    )
+  }
+}
+
 function rolarDado() {
   return Math.floor(Math.random() * 6) + 1
   
@@ -33,14 +55,18 @@ function turnoJogo() {
   console.log("Vida P2:", vida2)
   console.log("====================\n")
 
-  console.log("Cartas disponíveis:")
-  cartas.forEach((carta, index) => {
-    console.log(`${index + 1} - ${carta.nome} (${carta.dados}d6, bônus ${carta.bonus})`)
-  })
+  let maoP1 = comprarCartas(3)
+let maoP2 = comprarCartas(3)
+
+console.log("\nPlayer 1 comprou:")
+mostrarCartas(maoP1)
+
+console.log("\nPlayer 2 comprou:")
+mostrarCartas(maoP2)
 
   rl.question("\nPlayer 1 - Escolha o número da carta: ", function (resposta1) {
 
-    let cartaP1 = cartas[parseInt(resposta1) - 1]
+    let cartaP1 = maoP1[parseInt(resposta1) - 1]
 
     if (!cartaP1) {
       console.log("Escolha inválida!")
@@ -49,7 +75,7 @@ function turnoJogo() {
 
     rl.question("Player 2 - Escolha o número da carta: ", function (resposta2) {
 
-      let cartaP2 = cartas[parseInt(resposta2) - 1]
+      let cartaP2 = maoP2[parseInt(resposta2) - 1]
 
       if (!cartaP2) {
         console.log("Escolha inválida!")
@@ -58,8 +84,8 @@ function turnoJogo() {
 
       console.log("\n---CLASH---")
 
-      let total1 = rolarMultiplosDados(cartaP1.dados)
-      let total2 = rolarMultiplosDados(cartaP2.dados)
+      let total1 = rolarMultiplosDados(cartaP1.dados) + cartaP1.bonus
+      let total2 = rolarMultiplosDados(cartaP2.dados) + cartaP2.bonus
 
       console.log("Player 1 usou:", cartaP1.nome, "→ Total:", total1)
       console.log("Player 2 usou:", cartaP2.nome, "→ Total:", total2)
